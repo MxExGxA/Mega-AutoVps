@@ -15,15 +15,15 @@ install_iptables_persistent(){
 }
 
 update_vps(){
-rm /var/lib/dpkg/lock-frontend
-dpkg --configure -a
+        rm /var/lib/dpkg/lock-frontend
+        dpkg --configure -a
 
-echo -e "${YELLOW}Updating and Upgrading vps...${END}"
-apt update -y
-apt upgrade -y
-echo -e "${GREEN}Updating & Upgrading  completed!${END}"
-sleep 1
-first_run=0
+        echo -e "${YELLOW}Updating and Upgrading vps...${END}"
+        apt update -y
+        apt upgrade -y
+        echo -e "${GREEN}Updating & Upgrading  completed!${END}"
+        sleep 1
+        first_run=0
 }
 
 #install dependencies
