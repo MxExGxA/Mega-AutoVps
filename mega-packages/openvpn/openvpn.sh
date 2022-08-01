@@ -227,7 +227,7 @@ install_openvpn(){
 			echo "proxy_support $openvpn_proxy_support" >> /etc/mega-packages/openvpn/mega.vars
 
 			case $openvpn_proxy_support in
-			[yY])echo -ne "Enter Squid Proxy Port[3128]: " ; read openvpn_squid_port;;
+			[yY])echo -ne "Enter Squid Proxy Port: " ; read openvpn_squid_port;;
 			esac
 
 			echo "proxy_port $openvpn_squid_port" >> /etc/mega-packages/openvpn/mega.vars
