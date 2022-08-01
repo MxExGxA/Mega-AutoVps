@@ -48,7 +48,6 @@ mega-install(){
 	chmod +x openvpn/openvpn.sh
 	chmod +x squid/squid.sh
 	chmod +x user_manager/user_manager.sh
-	cd -P /root/mega_script/
 	cp -r mega-packages /etc/mega-packages
 	ln /etc/mega-packages/mega_script /bin/mega
         cd -P ../
