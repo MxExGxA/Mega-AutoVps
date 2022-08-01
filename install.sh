@@ -43,6 +43,7 @@ install_depends(){
 
 
 mega-install(){
+        
 	cd -P mega-packages/
 	chmod +x mega_script
 	chmod +x openvpn/openvpn.sh
