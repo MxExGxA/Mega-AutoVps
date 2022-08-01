@@ -43,16 +43,15 @@ install_depends(){
 
 
 mega-install(){
-        
+
 	cd -P mega-packages/
 	chmod +x mega_script
 	chmod +x openvpn/openvpn.sh
 	chmod +x squid/squid.sh
 	chmod +x user_manager/user_manager.sh
-	cp -r mega-packages /etc/mega-packages
-	ln /etc/mega-packages/mega_script /bin/mega
         cd -P ../
-        rm -r mega-packages/
+	mv mega-packages/ /etc/mega-packages
+	ln /etc/mega-packages/mega_script /bin/mega
 }
 
 initial_check
