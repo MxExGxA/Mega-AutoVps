@@ -1,0 +1,192 @@
+#!/bin/bash
+#Author: Elsayed Elghazy
+#Date: 1 Aug 2022
+#Description: this script will install and configure (squid proxy,openvpn,SSL,v2ray,SSH).
+#Modified: 1 Aug 2022
+#----------------------------------------------------------------------------------------
+
+#Text_colors
+export RED="\e[31m"
+export GREEN="\e[32m"
+export YELLOW="\e[33m"
+export BLUE="\e[1;34m"
+export MAGENTA="\e[1;35m"
+export CYAN="\e[1;36m"
+export BLACK="\033[30m"
+export WHITE="\033[97m"
+
+#Back_colors
+export BACK_RED="\e[1;41m"
+export BACK_GREEN="\e[1;42m"
+export BACK_YELLOW="\e[1;43m"
+export BACK_BLUE="\e[1;44m"
+export BACK_MAGENTA="\e[1;45m"
+export BACK_CYAN="\e[1;46m"
+export BACK_WHITE="\033[107m"
+
+export SEP="──────────────────────────────────────────────"
+export END="\e[0m"
+#----------------------------
+
+#install dependencies
+install_depends(){
+	for d in $@
+	do
+	which $d &> /dev/null
+		if [ $? != 0 ]
+		then
+		echo -e "${RED}$d is not installed, ${YELLOW}installing...${END}"
+		apt install $d -y &> /dev/null 
+		echo -e "${GREEN}$d has installed Successfully!!${END}"
+		sleep 1
+		fi
+	done
+}
+
+
+#------------------------------------------------------
+
+#getting ip address
+export IP=`curl -s ifconfig.me`
+#-----------------------
+clear
+
+#printing logo
+show_header(){
+clear
+
+LOGO=" MEGA-AUTOSCRIPT"
+VERSION="1.0"
+echo -e "${BACK_WHITE}${BLACK}$LOGO ${BACK_CYAN}${WHITE} V$VERSION ${END}"
+echo $SEP
+echo -e "███╗░░░███╗███████╗░██████╗░░█████╗░"
+echo -e "████╗░████║██╔════╝██╔════╝░██╔══██╗"
+echo -e "██╔████╔██║█████╗░░██║░░██╗░███████║"
+echo -e "██║╚██╔╝██║██╔══╝░░██║░░╚██╗██╔══██║"
+echo -e "██║░╚═╝░██║███████╗╚██████╔╝██║░░██║"
+echo -e "╚═╝░░░░░╚═╝╚══════╝░╚═════╝░╚═╝░░╚═╝"
+echo $SEP
+#showing vps details
+
+OS=`cat /etc/os-release | grep PRETTY_NAME | cut -d '=' -f2 | awk '{print $1" " $3}' | awk '{print substr( $0 , 2 )}'`
+DISK_SPACE=`fdisk -l | awk 'NR==1{print $3}'`
+TOTAL_MEM=`free -m | grep Mem | awk '{print $2}'`
+AV_MEM=`free -m | grep Mem | awk '{print $7}'`
+export CURRENT_USER=`whoami`
+USERS_COUNT=`cat  /etc/passwd | egrep "/bin/bash|/bin/sh" | cut -d ':' -f1 | wc -l`
+CPU_CORES=`cat /proc/cpuinfo | grep "cpu cores" | awk '{print $4}'`
+CPU_VEN=`cat /proc/cpuinfo | grep "vendor_id" | awk '{print $3}'`
+echo -e "IP: ${CYAN}$IP  ${END}OS: ${CYAN}$OS    ${END} "
+echo -e "Total Memory:${CYAN}${TOTAL_MEM}MB   ${END}Available memory:${CYAN}${AV_MEM}MB${END}"
+echo -e "CPU Cores: ${CYAN}$CPU_CORES${END}         CPU: ${CYAN}$CPU_VEN${END}"
+echo -e "Users: ${CYAN}$USERS_COUNT             ${END}Current User: ${CYAN}$CURRENT_USER${END}"
+echo $SEP
+
+PORTS=`netstat -npa | grep -w "LISTEN" | grep -w "tcp" | awk '{print $4}' | cut -d ':' -f2`
+
+for P in $PORTS
+do
+PROCESS=`ss -ltnup4 'sport = :'$P | tail -n +2 | awk '{print $7}' | cut -d '"' -f2`
+echo -e "$PROCESS: ${CYAN}$P${END}"
+done
+echo $SEP
+}
+
+#-----------------------------------------------------------------------
+
+#Disable-IPV6
+disable_ipv6(){
+FILE="/etc/sysctl.conf"
+STR="net.ipv6.conf.all.disable_ipv6=1"
+grep -q $STR $FILE
+
+if [[ $? != 0 ]]
+then
+	echo -e "${YELLOW}-Disabling IPV6...${END}"
+	sleep 1
+
+	echo "net.ipv6.conf.all.disable_ipv6=1" >> $FILE
+	echo "net.ipv6.conf.default.disable_ipv6=1" >> $FILE
+	echo "net.ipv6.conf.lo.disable_ipv6=1" >> $FILE
+	sysctl -p &> /dev/null
+
+	echo -e "${GREEN}-IPV6 has Disabled Successfully!!${END}"
+	sleep 1
+fi
+}
+#---------------------------------------------------------------
+
+#Enable IPV4 Forwarding
+enable_ipv4_forwarding(){
+FILE="/etc/sysctl.conf"
+STR2="net.ipv4.ip_forward=1"
+grep -xq $STR2 $FILE
+
+	if [ $? != 0 ]
+	then
+		echo $STR2 >> $FILE
+		sysctl -p &> /dev/null
+		echo -e "${GREEN}-IPV4 Forwarding has Enabled successfully !!${END}"
+		sleep 1
+	fi
+}
+#---------------------------------------------------------------------------
+
+#-------------------Install-and-configure-Squid-proxy---------------------#
+
+
+user_management(){
+	. /etc/mega-packages/user_manager/user_manager.sh
+}
+
+install_squid(){
+	. /etc/mega-packages/squid/squid.sh
+}
+
+install_openvpn(){
+	. /etc/mega-packages/openvpn/openvpn.sh
+}
+
+uninstall_mega(){
+	perform_uninstall(){
+	rm /bin/mega
+	rm -rf /etc/mega-packages
+	echo -e "${GREEN}mega-autoscript Has uninstalled Successfully!${END}"
+	}
+	echo -ne "Are you Sure?(y/n):" ; read CHOICE
+	case $CHOICE in
+	[yY])perform_uninstall;;
+	*)menu;;
+	esac
+
+
+}
+menu(){
+	show_header
+	export -f show_header
+	echo -e "${BACK_CYAN}                  -[MENU]-                    ${END}"
+	echo -e "1-User Management"
+	echo -e "2-Squid"
+	echo -e "3-Openvpn"
+	echo -e "4-SSH ${YELLOW}(Soon)${END}"
+	echo -e "5-V2ray ${YELLOW}(Soon)${END}"
+	echo -e "6-SSL ${YELLOW}(Soon)${END}"
+	echo -e "7-Uninstall mega"
+	echo -e "8-Exit"
+	echo -e $SEP
+	echo -ne "Enter Number(1-8):"; read CHOICE
+
+	case $CHOICE in
+	1)user_management;;
+	2)install_squid;;
+	3)install_openvpn;;
+	7)uninstall_mega;;
+	8)clear && exit 0;;
+	*)menu;;
+	esac
+}
+
+disable_ipv6
+enable_ipv4_forwarding
+install_depends lsof curl iptables
+menu
