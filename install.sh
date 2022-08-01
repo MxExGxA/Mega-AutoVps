@@ -6,12 +6,6 @@ initial_check(){
 
 }
 
-download_mega_packages(){
-
-        wget https://github.com/MxExGxA/Mega-AutoVps/tree/master/mega-packages
-
-}
-
 install_iptables_persistent(){
 
         echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections
@@ -61,8 +55,6 @@ mega-install(){
         rm -r mega-packages/
 }
 
-
-
 initial_check
 if [ $is_root == "root" ]
 then
@@ -73,7 +65,6 @@ sleep 2
 update_vps
 install_depends lsof curl iptables wget
 install_iptables_persistent
-download_mega_packages
 mega-install
 mega
 else
