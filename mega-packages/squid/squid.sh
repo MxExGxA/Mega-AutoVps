@@ -71,9 +71,7 @@ pipeline_prefetch off" > $SQUID_CONF_FILE
 
 	echo -e "${YELLOW}Checking squid status... ${END}"
 	sleep 1
-	service squid status &> /dev/null
-	if [ $? == 0 ]
-	then
+	if service squid status &> /dev/null ;then
 		echo -e "${GREEN}RUNNING!!${END}"
 	else
 		echo -e "${RED}ERROR!${END}"
@@ -83,9 +81,7 @@ pipeline_prefetch off" > $SQUID_CONF_FILE
 }
 
 check_squid_status(){
-	service squid status | grep "active (running)" &> /dev/null
-	if [ $? == 0 ]
-	then
+	if service squid status | grep "active (running)" &> /dev/null ;then
 	echo -e "${GREEN}Squid service is Running.${END}"
 	else
 	echo -e "${RED}Squid service is not running!${END}"
@@ -96,9 +92,7 @@ check_squid_status(){
 
 restart_squid_service(){
 	echo -e "${YELLOW}Restarting...${END}"
-	service squid restart &> /dev/null
-	if [ $? == 0 ]
-	then
+	if service squid restart &> /dev/null ;then
 	echo -e "${GREEN}Squid service has restarted.${END}"
 	else
 	echo -e "${RED}Failed to Restart Squid service${END}"
@@ -114,9 +108,7 @@ uninstall_squid(){
 
 		echo -e "${YELLOW}Uninstalling...${END}"
 		apt remove squid -y &> /dev/null
-		rm /etc/squid/squid.conf
-		if [ $? == 0 ]
-		then
+		if rm /etc/squid/squid.conf ;then
 		echo -e "${GREEN}Squid has uninstalled.${END}"
 		else
 		echo -e "${RED}Failed to uninstall squid!${END}"
@@ -175,9 +167,7 @@ squid_installed_menu(){
 }
 #check if squid is installed
 call_squid_menu(){
-which squid &> /dev/null
-	if [ $? != 0 ]
-	then
+	if ! which squid &> /dev/null ;then
 		squid_not_installed_menu
 	else
 		squid_installed_menu
