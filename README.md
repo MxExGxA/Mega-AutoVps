@@ -12,6 +12,10 @@
 ## Installation
 apt install git -y && git clone https://github.com/MxExGxA/Mega-AutoVps && cd Mega-AutoVps && chmod +x install.sh && ./install.sh
 
+# 
 
+<p>
+<img src="https://i.postimg.cc/26Csb5Gn/Mega.png"/>
+</p>
 
 
