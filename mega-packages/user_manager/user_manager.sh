@@ -1,13 +1,16 @@
 #!/bin/bash
+#Author: Elsayed Elghazy
+#Date: 1 Aug 2022
+#Description: this script will add/remove System users 
+#Modified: 1 Aug 2022
+#---------------------------------------------------------------------------------------
 
 
 add_user(){
 	echo -ne "${YELLOW}Enter Username to create: ${END}" ; read username
 
 #check if user is already exists
-	cat /etc/passwd | awk '{print $1}' | grep -w $username &> /dev/null
-	if [ $? == 0 ]
-	then
+	if cat /etc/passwd | awk '{print $1}' | grep -w $username &> /dev/null ;then
 	#user already exists
 	echo -e "${RED}The User $usermame is Already exists!${END}"
 	else
@@ -24,9 +27,7 @@ remove_user(){
 	USERS=`cat /etc/passwd | egrep "/bin/bash|/bin/sh" | cut -d ':' -f1`
 	echo -e "$USERS"
 	echo -ne "${YELLOW}Enter Username remove: ${END}" ; read username
-	userdel $username &> /dev/null
-	if [ $? == 0 ]
-	then
+	if userdel $username &> /dev/null ;then
 	echo -e "${GREEN}User $username has been deleted Successfully!${END}"
 	else
 	echo -e "${RED}Could not Delete User $username${END}"
