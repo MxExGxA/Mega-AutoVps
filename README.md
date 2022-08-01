@@ -1,4 +1,10 @@
 # Mega-AutoVps
+### This Script Will Install:
+* Squid Proxy Server
+* Openvpn Server 
+* V2ray Server(Soon)
+* SHH Server(Soon)
+* SSL (Soon)
 ### Tested on:
 * Debian 9
 * Debian 10
