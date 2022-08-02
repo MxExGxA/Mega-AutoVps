@@ -58,6 +58,10 @@ mega-install(){
         cd -P ../
 	mv mega-packages/ /etc/mega-packages
 	ln /etc/mega-packages/mega_script /bin/mega
+	clear
+	echo "Installation Complete, Type (mega) then press Enter to Run Mega-AutoScript."
+	cd -P ../
+	rm -rf MegaAutoVps/
 }
 
 initial_check
@@ -72,7 +76,6 @@ install_depends lsof curl iptables wget
 install_iptables_persistent
 install_other_depends
 mega-install
-mega
 else
 echo "permission denied! root access required"
 exit 1
