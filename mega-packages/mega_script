@@ -66,9 +66,11 @@ echo -e "██║╚██╔╝██║██╔══╝░░██║░�
 echo -e "██║░╚═╝░██║███████╗╚██████╔╝██║░░██║"
 echo -e "╚═╝░░░░░╚═╝╚══════╝░╚═════╝░╚═╝░░╚═╝"
 echo $SEP
-#showing vps details
 
-OS=`cat /etc/os-release | grep PRETTY_NAME | cut -d '=' -f2 | awk '{print $1" " $3}' | awk '{print substr( $0 , 2 )}'`
+#showing vps details
+OS_ID=`cat /etc/os-release | grep -w ID | cut -d "=" -f2`
+OS_VER=`cat /etc/os-release | grep -w VERSION_ID | cut -d '"' -f2`
+OS="$OS_ID $OS_VER"
 DISK_SPACE=`fdisk -l | awk 'NR==1{print $3}'`
 TOTAL_MEM=`free -m | grep Mem | awk '{print $2}'`
 AV_MEM=`free -m | grep Mem | awk '{print $7}'`
