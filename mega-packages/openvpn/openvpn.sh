@@ -6,6 +6,7 @@
 #---------------------------------------------------------------------------------------
 
 OPENVPN_CONF_FILE="/etc/openvpn/server.conf"
+is_num='^[0-9]+$'
 
 add_iptables_rules(){
 	if which iptables &> /dev/null ;then
@@ -34,17 +35,23 @@ add_iptables_rules(){
 change_openvpn_port(){
 
 	echo -ne "${YELLOW}Enter Port:${END}" ; read OVPORT
-	if netstat -npa | grep -w LISTEN | awk '{print $4}' | cut -d ':' -f2 |  grep -w $OVPORT &> /dev/null ;then
-	echo -e "${RED}Failed!,Port $OVPORT is in use${END}"
-	sleep 2
-	change_openvpn_port
+	if [[ $OVPORT =~ $is_num ]]
+	then
+		if netstat -npa | grep -w LISTEN | awk '{print $4}' | cut -d ':' -f2 |  grep -w $OVPORT &> /dev/null ;then
+		echo -e "${RED}Failed!,Port $OVPORT is in use${END}"
+		sleep 2
+		change_openvpn_port
+		else
+		echo -e "${GREEN}Port $OVPORT Accepted!!${END}"
+		echo $OVPORT
+		sed -i "/.*port/c\port $OVPORT" $OPENVPN_CONF_FILE
+		echo -e "${YELLOW}Restarting OpenVPN Service...${END}"
+		service openvpn@server restart
+		check_openvpn_status
+		fi
 	else
-	echo -e "${GREEN}Port $OVPORT Accepted!!${END}"
-	echo $OVPORT
-	sed -i "/.*port/c\port $OVPORT" $OPENVPN_CONF_FILE
-	echo -e "${YELLOW}Restarting OpenVPN Service...${END}"
-	service openvpn@server restart
-	check_openvpn_status
+	echo -e "${RED}Wrong Port Number!!${END}"
+	change_openvpn_port
 	fi
 
 }
@@ -151,15 +158,21 @@ install_openvpn(){
 
 		choose_port(){
 			read -p "Enter OpenVPN Port: " -i 1194 -e openvpn_port
-			if netstat -npa | grep -w LISTEN | awk '{print $4}' | cut -d ':' -f2 |  grep -w $openvpn_port &> /dev/null ;then
-			echo -e  "${RED}Failed!,Port $openvpn_port is in use${END}"
-			sleep 2
-			choose_port
+
+			if [[ $openvpn_port =~ $is_num ]] && (( $openvpn_port >= 1 )) && (( $openvpn_port <= 65000 ))
+			then
+				if netstat -npa | grep -w LISTEN | awk '{print $4}' | cut -d ':' -f2 |  grep -w $openvpn_port &> /dev/null ;then
+				echo -e  "${RED}Failed!,Port $openvpn_port is in use${END}"
+				choose_port
+				else
+				echo -e  "${GREEN}Port $OVPORT Accepted!!${END}"
+				fi
+				echo $SEP
+				echo "port $openvpn_port" > /etc/mega-packages/openvpn/mega.vars
 			else
-			echo -e  "${GREEN}Port $OVPORT Accepted!!${END}"
+			echo -e "${RED}Wrong Port Number!!${END}"
+			choose_port
 			fi
-			echo $SEP
-			echo "port $openvpn_port" > /etc/mega-packages/openvpn/mega.vars
 
 		}
 
@@ -228,6 +241,8 @@ install_openvpn(){
 
 			case $openvpn_proxy_support in
 			[yY])echo -ne "Enter Squid Proxy Port: " ; read openvpn_squid_port;;
+			[nN])echo -e "${YELLOW}Continue Without Proxy Support ...${END}";;
+			*)proxy_support;;
 			esac
 
 			echo "proxy_port $openvpn_squid_port" >> /etc/mega-packages/openvpn/mega.vars

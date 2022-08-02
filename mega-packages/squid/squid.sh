@@ -6,25 +6,30 @@
 #---------------------------------------------------------------------------------------
 
 SQUID_CONF_FILE="/etc/squid/squid.conf"
-
+is_num='^[0-9]+$'
 
 #-------------------Install-and-configure-Squid-proxy---------------------#
 
 change_squid_port(){
 
 	echo -ne "${YELLOW}Enter Squid Port:${END}"; read PORT
-
-	#check if port is in use
-	netstat -npa | awk '{print $4}' | cut -d ':' -f2 |  grep $PORT &> /dev/null
-	if [ $? == 0 ]
+	if [[ $PORT =~ $is_num ]] && (( $PORT >= 1 )) && (( $PORT <= 65000 ))
 	then
-		echo -e "${RED}port $PORT is used by another process !${END}"
-		change_squid_port
+		#check if port is in use
+		netstat -npa | awk '{print $4}' | cut -d ':' -f2 |  grep $PORT &> /dev/null
+		if [ $? == 0 ]
+		then
+			echo -e "${RED}port $PORT is used by another process !${END}"
+			change_squid_port
+		else
+			echo -e "${GREEN}Port $PORT Accepted!${END}"
+			sed -i "/http_port/c\http_port 0.0.0.0:$PORT" $SQUID_CONF_FILE
+			echo -e "${YELLOW}Restarting Squid Service...${END}"
+			service squid restart
+		fi
 	else
-		echo -e "${GREEN}Port $PORT Accepted!${END}"
-		sed -i "/http_port/c\http_port 0.0.0.0:$PORT" $SQUID_CONF_FILE
-		echo -e "${YELLOW}Restarting Squid Service...${END}"
-		service squid restart
+	echo -e "${RED}Wrong Port Number${END}"
+	change_squid_port
 	fi
 
 }
