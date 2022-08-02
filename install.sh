@@ -14,6 +14,12 @@ install_iptables_persistent(){
 
 }
 
+install_other_depends(){
+
+        apt install net-tools -y
+
+}
+
 update_vps(){
         rm /var/lib/dpkg/lock-frontend
         dpkg --configure -a
@@ -64,6 +70,7 @@ sleep 2
 update_vps
 install_depends lsof curl iptables wget
 install_iptables_persistent
+install_other_depends
 mega-install
 mega
 else
