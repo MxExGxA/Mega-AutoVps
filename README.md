@@ -3,7 +3,7 @@
 * Squid Proxy Server
 * Openvpn Server 
 * V2ray Server(Soon)
-* SHH Server(Soon)
+* SSH DropBear Server(Soon)
 * SSL (Soon)
 ### Tested on:
 * Debian 9
