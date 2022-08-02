@@ -61,7 +61,7 @@ mega-install(){
 	clear
 	echo "Installation Complete, Type (mega) then press Enter to Run Mega-AutoScript."
 	cd -P ../
-	rm -rf MegaAutoVps/
+	rm -rf Mega-AutoVps/
 }
 
 initial_check
