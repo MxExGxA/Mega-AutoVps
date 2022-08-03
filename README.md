@@ -11,8 +11,10 @@
 * Debian 9,10,11
 * Ubuntu 18,20
 ## Installation
+```
 apt install git -y && git clone https://github.com/MxExGxA/Mega-AutoVps && cd Mega-AutoVps && chmod +x install.sh && ./install.sh && cd ../
-
+```
+After installation complete type "mega" and press Enter to run the script
 # 
 
 <p>
