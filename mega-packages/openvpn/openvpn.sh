@@ -35,7 +35,7 @@ add_iptables_rules(){
 change_openvpn_port(){
 
 	echo -ne "${YELLOW}Enter Port:${END}" ; read OVPORT
-	if [[ $OVPORT =~ $is_num ]]
+	if [[ $OVPORT =~ $is_num ]] && (( $OVPORT >= 1 )) && (( $OVPORT <= 65000 ))
 	then
 		if netstat -npa | grep -w LISTEN | awk '{print $4}' | cut -d ':' -f2 |  grep -w $OVPORT &> /dev/null ;then
 		echo -e "${RED}Failed!,Port $OVPORT is in use${END}"
