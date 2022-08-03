@@ -87,11 +87,9 @@ then
 echo "#Mega_OpenVPN_Server
 client
 dev tun
-<connection>
-remote $IP $openvpn_port $openvpn_protocol
+proto $openvpn_protocol
+remote $IP $openvpn_port
 http-proxy $IP $openvpn_squid_port
-http-proxy-retry
-</connection>
 cipher $openvpn_encryption
 auth SHA512
 auth-nocache
