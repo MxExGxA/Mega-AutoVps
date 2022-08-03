@@ -25,13 +25,12 @@ update_vps(){
         kill -9 $(ps aux | grep apt | awk '{print $2}')
         rm /var/lib/dpkg/lock-frontend
         dpkg --configure -a
-        else
+        fi
         echo -e "${YELLOW}Updating and Upgrading vps...${END}"
         apt update -y
         apt upgrade -y
         echo -e "${GREEN}Updating & Upgrading  completed!${END}"
         sleep 1
-        fi
 }
 
 #install dependencies
