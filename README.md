@@ -6,10 +6,13 @@
 * SSH DropBear Server(Soon)
 * SSL (Soon)
 
-## Only Supports Ubuntu & Debian
-### Tested on:
-* Debian 9,10,11
-* Ubuntu 18,20
+## Only Supports :
+* Debian 9
+* Debian 10 
+* Debian 11
+* Ubuntu 18 LTS
+* Ubuntu 20 LTS
+
 ## Installation
 ```
 apt install git -y && git clone https://github.com/MxExGxA/Mega-AutoVps && cd Mega-AutoVps && chmod +x install.sh && ./install.sh && cd ../
