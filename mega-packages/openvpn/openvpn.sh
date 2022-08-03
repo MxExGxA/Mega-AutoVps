@@ -7,6 +7,8 @@
 
 OPENVPN_CONF_FILE="/etc/openvpn/server.conf"
 is_num='^[0-9]+$'
+cd 
+cd -
 
 add_iptables_rules(){
 	if which iptables &> /dev/null ;then
@@ -81,14 +83,14 @@ call_generate_ovpn_config(){
 generate_ovpn_config(){
 
 cd -P /etc/openvpn/client
+
 if [ $openvpn_proxy_support == "y" ] || [ $openvpn_proxy_support == "Y" ]
 then
 
 echo "#Mega_OpenVPN_Server
 client
 dev tun
-proto $openvpn_protocol
-remote $IP $openvpn_port
+remote $IP $openvpn_port $openvpn_protocol
 http-proxy $IP $openvpn_squid_port
 cipher $openvpn_encryption
 auth SHA512

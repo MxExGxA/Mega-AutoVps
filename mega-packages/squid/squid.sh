@@ -7,7 +7,8 @@
 
 SQUID_CONF_FILE="/etc/squid/squid.conf"
 is_num='^[0-9]+$'
-
+cd 
+cd -
 #-------------------Install-and-configure-Squid-proxy---------------------#
 
 change_squid_port(){
