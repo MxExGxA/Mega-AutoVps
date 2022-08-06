@@ -88,8 +88,11 @@ PORTS=`netstat -npa | grep -w "LISTEN" | grep -w "tcp" | awk '{print $4}' | cut 
 
 for P in $PORTS
 do
+if [ ! -z "$P" ]
+then
 PROCESS=`ss -ltnup4 'sport = :'$P | tail -n +2 | awk '{print $7}' | cut -d '"' -f2`
 echo -e "$PROCESS: ${CYAN}$P${END}"
+fi
 done
 echo $SEP
 }
