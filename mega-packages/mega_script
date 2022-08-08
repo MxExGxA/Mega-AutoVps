@@ -56,7 +56,7 @@ show_header(){
 clear
 
 LOGO=" MEGA-AUTOSCRIPT"
-VERSION="1.0"
+VERSION="1.3"
 echo -e "${BACK_WHITE}${BLACK}$LOGO ${BACK_CYAN}${WHITE} V$VERSION ${END}"
 echo $SEP
 echo -e "███╗░░░███╗███████╗░██████╗░░█████╗░"
