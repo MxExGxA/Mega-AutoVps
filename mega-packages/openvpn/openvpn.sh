@@ -34,6 +34,16 @@ add_iptables_rules(){
 	fi
 
 }
+
+check_connected_users(){
+	show_header
+	users_count=`netstat -p | grep "/openvpn" | wc -l`
+	echo -e "Connected users: ${GREEN}$users_count${END}"
+	sleep 2
+	call_openvpn_menu
+
+}
+
 change_openvpn_port(){
 
 	echo -ne "${YELLOW}Enter Port:${END}" ; read OVPORT
@@ -413,22 +423,24 @@ openvpn_installed_menu(){
 
 	echo -e "${BACK_CYAN}                -[OpenVpn]-                   ${END}"
 	echo 	"0-Go Back"
-	echo 	"1-generate client config(/root/client.ovpn)"
-	echo 	"2-Change openvpn port"
-	echo 	"3-Check openvpn status"
-	echo 	"4-Restart openvpn"
-	echo 	"5-Uninstall openvpn"
+	echo 	"1-check connected users"
+	echo 	"2-generate client config(/root/client.ovpn)"
+	echo 	"3-Change openvpn port"
+	echo 	"4-Check openvpn status"
+	echo 	"5-Restart openvpn"
+	echo 	"6-Uninstall openvpn"
 	echo 	$SEP
 
 	echo -ne "Enter Number(0-4): " ; read CHOICE
 
 	case $CHOICE in
 	0)mega;;
-	1)call_generate_ovpn_config;;
-	2)change_openvpn_port;;
-	3)check_openvpn_status;;
-	4)restart_openvpn;;
-	5)uninstall_openvpn;;
+	1)check_connected_users;;
+	2)call_generate_ovpn_config;;
+	3)change_openvpn_port;;
+	4)check_openvpn_status;;
+	5)restart_openvpn;;
+	6)uninstall_openvpn;;
 	*)openvpn_installed_menu;;
 	esac
 }
