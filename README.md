@@ -21,7 +21,7 @@ After installation complete type "mega" and press Enter to run the script
 # 
 
 <p>
-<img src="https://i.postimg.cc/26Csb5Gn/Mega.png"/>
+<img src="https://i.postimg.cc/NMDcs6fQ/Mega.png"/>
 </p>
 
 
