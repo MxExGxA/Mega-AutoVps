@@ -1,4 +1,4 @@
-# Mega-AutoVps
+# Mega-AutoVps (discontinued)
 ### This Script Will Install:
 * Squid Proxy Server
 * Openvpn Server 
